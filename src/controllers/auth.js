@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const uuid = require("uuid");
 
 exports.register = async (req, res) => {
-  const { email, password } = req.body;
+  const { pseudo, email, password } = req.body;
 
   try {
     // Check if the email already exists in the database
@@ -17,7 +17,7 @@ exports.register = async (req, res) => {
     // Create a new user with the provided email and hashed password
     const hashedPassword = await bcrypt.hash(password, 8);
     const id = uuid.v4();
-    const newUser = new User({ id: id, email, password: hashedPassword });
+    const newUser = new User({ pseudo, email, password: hashedPassword });
     await newUser.save();
 
     res.json({ message: "User registered successfully" });
