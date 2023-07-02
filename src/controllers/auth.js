@@ -1,23 +1,34 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
+const Role = require("../models/role");
 const jwt = require("jsonwebtoken");
-const uuid = require("uuid");
 
 exports.register = async (req, res) => {
   const { pseudo, email, password } = req.body;
 
   try {
     // Check if the email already exists in the database
-    const existingUser = await User.findOne({ email });
+    const existingEmailUser = await User.findOne({ email });
+    const existingPseudoUser = await User.findOne({ pseudo });
 
-    if (existingUser) {
+    if (existingEmailUser) {
       return res.status(400).send({ error: "Email already exists" });
+    }
+
+    if (existingPseudoUser) {
+      return res.status(400).send({ error: "Pseudo already exists" });
     }
 
     // Create a new user with the provided email and hashed password
     const hashedPassword = await bcrypt.hash(password, 8);
-    const id = uuid.v4();
-    const newUser = new User({ pseudo, email, password: hashedPassword });
+    const role = await Role.findOne({ name: "user" });
+
+    const newUser = new User({
+      pseudo,
+      email,
+      password: hashedPassword,
+      roles: [role.name],
+    });
     await newUser.save();
 
     res.json({ message: "User registered successfully" });
@@ -45,7 +56,8 @@ exports.login = async (req, res) => {
 
     res.send({
       message: "User logged in successfully",
-      userId: user.id,
+      // userId: user.id,
+      userPseudo: user.pseudo,
       userEmail: user.email,
       accessToken: token,
     });
