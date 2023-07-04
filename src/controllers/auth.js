@@ -56,10 +56,10 @@ exports.login = async (req, res) => {
 
     res.send({
       message: "User logged in successfully",
-      // userId: user.id,
       userPseudo: user.pseudo,
       userEmail: user.email,
       accessToken: token,
+      roles: user.roles,
     });
   } catch (error) {
     console.error("Error during user login", error);
