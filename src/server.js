@@ -10,6 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 // Initialize DB
 require("./config/db");
 require("./routes/auth")(app);
+require("./routes/recrutement")(app);
 
 // simple route
 app.get("/", (req, res) => {
