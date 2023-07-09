@@ -3,9 +3,17 @@ const mongoose = require("mongoose");
 const Recrutement = mongoose.model(
   "Recrutement",
   new mongoose.Schema({
-    pseudo: String,
-    classe: String,
-    presentation: String,
+    presentation: {
+      pseudo: String,
+      disponibilites: String,
+      discord: String,
+    },
+    personnages: [
+      {
+        classe: String,
+        ilvl: Number,
+      },
+    ],
   })
 );
 

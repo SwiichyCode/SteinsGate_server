@@ -1,13 +1,12 @@
 const Recrutement = require("../models/recrutement");
 
 exports.postRecrutement = async (req, res) => {
-  const { pseudo, classe, presentation } = req.body;
+  const { presentation, personnages } = req.body;
 
   try {
     const newRecrutement = new Recrutement({
-      pseudo,
-      classe,
       presentation,
+      personnages,
     });
     await newRecrutement.save();
 
